@@ -1,0 +1,11 @@
+
+dist:
+    main.py
+    src:
+        icons
+        img
+    db_database:
+        semiland_database.db
+
+
+pyinstaller --onefile --windowed --icon=se.ico .\main.py

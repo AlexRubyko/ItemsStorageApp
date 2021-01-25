@@ -1,0 +1,26 @@
+-database_backup:
+	project_structure.txt
+	semiland_database.db
+	state.txt
+
+-db_database:
+	semiland_database.db
+-src:
+	current_pictures
+	icons:
+		add_engineer.png
+		add_sell.png
+		default_img.png
+		new_member.png
+		power_module.png
+		return.png
+		SemilandLOGO.jpg
+		SemilandLOGOPassword.jpg
+		take_item.png
+		update.png
+		updateToServer.png
+		upgrade_btn.png
+		upload_new_img.png
+	img
+-main.exe
+	
