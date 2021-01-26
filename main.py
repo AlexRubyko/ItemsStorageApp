@@ -450,14 +450,24 @@ class Main(QMainWindow):
                     self.productsTable.insertRow(row_number)
                     for column_number, data in enumerate(row_data):
                         if str(row_data[5]) == "UnAvailable":
+                            
                             self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
-                            self.productsTable.item(row_number, column_number).setBackground(QColor(255, 204, 204))
                             self.productsTable.sortItems(10, Qt.AscendingOrder)
+                        
+                            if column_number == 10 and row_data[4] == 0:
+                                continue
+
+                            self.productsTable.item(row_number, column_number).setBackground(QColor(255, 204, 204))
+
                         elif str(row_data[10]) == 'Picked' and str(row_data[5]) == "Available":
                             print("Picked")
                             self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
-                            self.productsTable.item(row_number, column_number).setBackground(QColor(180, 190, 204))
+                            
                             self.productsTable.sortItems(10, Qt.AscendingOrder)
+
+                            if column_number == 10:
+                                continue
+                            self.productsTable.item(row_number, column_number).setBackground(QColor(180, 190, 204))
                         else:
                             self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
                             self.productsTable.sortItems(10, Qt.AscendingOrder)
@@ -526,10 +536,15 @@ class Main(QMainWindow):
                 for column_number, data in enumerate(row_data):
                     if str(row_data[5]) == "UnAvailable":
                         self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                        
+                        if column_number == 10:
+                            continue
                         self.productsTable.item(row_number, column_number).setBackground(QColor(255, 204, 204))
                     elif str(row_data[10]) == 'Picked' and str(row_data[5]) == "Available":
                         print("Picked")
                         self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                        if column_number == 10:
+                            continue
                         self.productsTable.item(row_number, column_number).setBackground(QColor(180, 190, 204))
 
         elif self.availableProducts.isChecked() == True:
@@ -546,14 +561,19 @@ class Main(QMainWindow):
                 for column_number, data in enumerate(row_data):
                     if str(row_data[5]) == "UnAvailable":
                         self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                        if column_number == 10:
+                            continue
                         self.productsTable.item(row_number, column_number).setBackground(QColor(255, 204, 204))
                     elif str(row_data[10]) == 'Picked' and str(row_data[5]) == "Available":
                         print("Picked")
                         self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                        if column_number == 10:
+                            continue
                         self.productsTable.item(row_number, column_number).setBackground(QColor(180, 190, 204))
 
                     else:
                         self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
         elif self.notAvailableProducts.isChecked() == True:
             self.productsTable.sortItems(10, Qt.AscendingOrder)
             query = ("SELECT product_id,description,product_manufacturer,product_name,product_quota,product_availability,supplier,date_adding,product_price,product_po,picked_by FROM products WHERE product_availability='UnAvailable'")
@@ -567,6 +587,8 @@ class Main(QMainWindow):
                 self.productsTable.insertRow(row_number)
                 for column_number, data in enumerate(row_data):
                     self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                    if column_number == 10:
+                        continue
                     self.productsTable.item(row_number, column_number).setBackground(QColor(255, 204, 204))
 
     def sell_product(self):
