@@ -167,7 +167,7 @@ class TakeProductItem(QWidget):
         product_id = self.productModelCombo.currentData()
         query = ("SELECT product_quota, product_po FROM products WHERE product_id=?")
         quota = cur.execute(query, (product_id,)).fetchone()
-        print(quota)
+        
         try:
             self.qtx = quota[1]
             dfg = cur.execute("SELECT product_img FROM products WHERE product_po=?", (self.qtx,)).fetchone()
@@ -176,7 +176,7 @@ class TakeProductItem(QWidget):
             for i in range(1, quota[0]+1):
                 self.quantityCombo.addItem(str(i))
         except:
-            print("Sss")
+            pass
 
     def memberComboValue(self):
         print("memberComboValue")

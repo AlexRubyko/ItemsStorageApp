@@ -173,13 +173,14 @@ class Main(QMainWindow):
         self.productsTable.setHorizontalHeaderItem(10, QTableWidgetItem("Picked"))
         #self.productsTable.setHorizontalHeaderItem(11, QTableWidgetItem("Some"))
 
-        #self.productsTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        #self.productsTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        #self.productsTable.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)
-        #self.productsTable.horizontalHeader().setSectionResizeMode(4, QHeaderView.Stretch)
-        #self.productsTable.horizontalHeader().setSectionResizeMode(5, QHeaderView.Stretch)
-        #self.productsTable.horizontalHeader().setSectionResizeMode(6, QHeaderView.Stretch)
-        #self.productsTable.horizontalHeader().setSectionResizeMode(7, QHeaderView.Stretch)
+        self.productsTable.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.productsTable.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        self.productsTable.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        self.productsTable.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        self.productsTable.horizontalHeader().setSectionResizeMode(5, QHeaderView.ResizeToContents)
+        self.productsTable.horizontalHeader().setSectionResizeMode(6, QHeaderView.ResizeToContents)
+        self.productsTable.horizontalHeader().setSectionResizeMode(7, QHeaderView.Stretch)
+        
 
         self.productsTable.doubleClicked.connect(self.selected_product) #TODO double click event
         self.productsTable.cellClicked.connect(self.sell_picked_clicked)
@@ -313,7 +314,7 @@ class Main(QMainWindow):
         self.tabs2.setLayout(self.memberMainLayout)
 
     def closeEvent(self, event):
-        print("This :",self.update_to_DB.text())
+        
         if self.update_to_DB.text() == 'Update':
             result = QMessageBox.question(self, "Confirm Exit?", "You didn't save changes to DataBase\nPlease save Changes", QMessageBox.Save | QMessageBox.No | QMessageBox.Cancel)
             event.ignore()
@@ -365,13 +366,25 @@ class Main(QMainWindow):
 
                 if row_data[4] == 0:
                     self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+                    
+                    # Setting Red color for Anavailable items
+                    if column_number == 10 and row_data[4] == 0:
+                        continue
                     self.productsTable.item(row_number, column_number).setBackground(QColor(255, 204, 204))
-                elif str(row_data[10]) == 'Picked': #10
-                    self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
-                    self.productsTable.item(row_number, column_number).setBackground(QColor(180, 190, 204))
-                else:
-                    self.productsTable.setItem(row_number, column_number,QTableWidgetItem(str(data)))
 
+                elif str(row_data[10]) == 'Picked': #10
+                    
+                    self.productsTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
+
+                    # Setting gray color for picked items
+                    if column_number == 10:
+                        continue
+                    self.productsTable.item(row_number, column_number).setBackground(QColor(180, 190, 204))
+                    
+                else:                    
+                    self.productsTable.setItem(row_number, column_number,QTableWidgetItem(str(data)))
+                    
+                    
 
         self.productsTable.setEditTriggers(QAbstractItemView.NoEditTriggers) #TODO Check this line for table
         self.productsTable.resizeColumnsToContents()
@@ -523,7 +536,7 @@ class Main(QMainWindow):
             self.productsTable.sortItems(10, Qt.AscendingOrder)
             query = ("SELECT product_id,description,product_manufacturer,product_name,product_quota,product_availability,supplier,date_adding,product_price,product_po,picked_by FROM products WHERE product_availability='Available'")
             products = cur.execute(query).fetchall()
-            print(products) # TODO delete line
+            
 
             for i in reversed(range(self.productsTable.rowCount())):
                 self.productsTable.removeRow(i)
@@ -545,7 +558,7 @@ class Main(QMainWindow):
             self.productsTable.sortItems(10, Qt.AscendingOrder)
             query = ("SELECT product_id,description,product_manufacturer,product_name,product_quota,product_availability,supplier,date_adding,product_price,product_po,picked_by FROM products WHERE product_availability='UnAvailable'")
             products = cur.execute(query).fetchall()
-            print(products) # TODO delete line
+            
 
             for i in reversed(range(self.productsTable.rowCount())):
                 self.productsTable.removeRow(i)
@@ -579,7 +592,7 @@ class Main(QMainWindow):
     def sell_picked_clicked(self, row, column):
         some = self.productsTable.item(row, 9)
         self.id = some.text()
-        print(self.id)
+        
         if column == 10:
             query = ("SELECT * FROM products WHERE product_po=?")
             product = cur.execute(query, (self.id,)) # single item tuple=(1,)
@@ -1102,6 +1115,12 @@ class SnippingWidget(QtWidgets.QWidget):
 
 def main():
     app = QApplication(sys.argv)
+    style = """
+        QWidget{
+            ;
+        }
+    """
+    app.setStyleSheet(style)
     window = Main()
     sys.exit(app.exec_())
 

@@ -60,7 +60,7 @@ class StatisticClass(QWidget):
             row_number = self.statisticTable.rowCount()
             self.statisticTable.insertRow(row_number)
             for column_number, data in enumerate(row_data):
-
+ 
                 if row_data[6] == 'Picked':
                     self.statisticTable.setItem(row_number, column_number, QTableWidgetItem(str(data)))
                     self.statisticTable.item(row_number, column_number).setBackground(QColor(255, 204, 204))
