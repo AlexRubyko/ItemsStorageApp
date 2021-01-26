@@ -823,7 +823,7 @@ class DisplayProduct(QWidget):
         self.mainWindow = None
         copyfile('src/icons/default_img.png', 'src/img/default_img.png')
         copyfile('src/icons/upload_new_img.png', 'src/img/upload_new_img.png')
-        self.snippingTool = SnippingWidget(self)
+        #self.snippingTool = SnippingWidget(self)
         self.main = main
         self.ui()
         self.show()
@@ -981,8 +981,12 @@ class DisplayProduct(QWidget):
             QMessageBox.information(self, "Information", "Please enter integer Value for price")
 
         copyfile("db_database/main_database.db", "database_backup/main_database.db")
-        copyfile(defaulImg, 'src/img/{}'.format(img_name))
-        copyfile('src/icons/default_img.png', 'src/img/default_img.png')
+        try:
+            copyfile(defaulImg, 'src/img/{}'.format(img_name))
+            copyfile('src/icons/default_img.png', 'src/img/default_img.png')
+        except:
+            print("Can not save picture" + defaulImg)
+
         self.main.update_to_DB.setIcon(QIcon('src/icons/updateToServer.png'))
         self.main.update_to_DB.setText("Update")
         self.main.productsTable.sortItems(1, Qt.AscendingOrder)
@@ -1010,7 +1014,7 @@ class DisplayProduct(QWidget):
             except Exception as e:
                 QMessageBox.information(self, "Information!", "{}".format(e))
 
-        self.snippingTool.start()
+        #self.snippingTool.start()
         self.show()
 
     def delete_product(self):
@@ -1104,7 +1108,7 @@ class SnippingWidget(QtWidgets.QWidget):
     def mouseMoveEvent(self, event):
         self.end = event.pos()
         self.update()
-
+    
     def mouseReleaseEvent(self, event):
         global img_name, real_img_name, defaulImg
         SnippingWidget.num_snip += 1
@@ -1125,7 +1129,7 @@ class SnippingWidget(QtWidgets.QWidget):
         img_name = os.path.basename(img_name)
         real_img_name = "src/img/{}".format(img_name)
         real_img_name_current = "src/current_pictures/{}".format(img_name)
-        #img.save(real_img_name)
+        img.save(real_img_name)
         try:
             img.save(real_img_name_current)
             self.add_prod.product_Img.setPixmap(QPixmap(real_img_name_current))
@@ -1134,6 +1138,7 @@ class SnippingWidget(QtWidgets.QWidget):
         defaulImg = real_img_name_current
         print("Real Image: ", defaulImg)
         self.close()
+        
 
 def main():
     app = QApplication(sys.argv)

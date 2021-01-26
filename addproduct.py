@@ -45,7 +45,7 @@ class AddProduct(QWidget):
         #self.addProductImg.mouseDoubleClickEvent = self.some_stuff
         #self.titleText = QLabel("Add Product")
         self.addProductImg.setAlignment(Qt.AlignCenter)
-        self.addProductImg.mousePressEvent = self.snipping_tool
+        #self.addProductImg.mousePressEvent = self.snipping_tool
         # Bottom Layout
         self.descriptionEntry = QLineEdit()
         self.descriptionEntry.setStyleSheet(style.search_btn_style_2())
@@ -320,3 +320,4 @@ class SnippingWidget(QtWidgets.QWidget):
         defaulImg = real_img_name_current
         print("Real Image: ", defaulImg)
         self.close()
+    
